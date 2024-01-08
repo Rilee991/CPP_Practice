@@ -41,13 +41,36 @@ int tab(int arr[], int n) {
     return dp[n-1];
 }
 
+int solve2(int arr[], int n) {
+    int sum0 = arr[0];
+    if(n == 1)  return sum0;
+    int sum1 = arr[0] + arr[1];
+    if(n == 2)  return sum1;
+    int sum2 = max(sum1, max(arr[1]+arr[2], arr[2]+sum0));
+    if(n == 3)  return sum2;
+    int sum3 = max(sum2, max(arr[3]+arr[2]+sum0, arr[3]+sum1));
+    if(n == 4)  return sum3;
+    
+
+    for(int i=4;i<n;i++) {
+        // cout<<sum0<<", "<<sum1<<", "<<sum2<<", "<<sum3<<"\n";
+        sum0 = sum1;
+        sum1 = sum2;
+        sum2 = sum3;
+        sum3 = max(sum2, max(arr[i-1]+arr[i]+sum0, arr[i]+sum1));
+        // cout<<sum0<<", "<<sum1<<", "<<sum2<<", "<<sum3<<"\n";
+    }
+
+    return sum3;
+}
+
 int main() {
     int arr[] = { 100, 1000, 100, 1000, 1 };
     int n = sizeof(arr)/sizeof(int);
     memset(dp, -1, sizeof dp);
 
     auto start2 = chrono::high_resolution_clock::now();
-    cout<<solve(arr,n,0)<<"--2\n";
+    cout<<solve2(arr,n)<<"--2\n";
     auto end2 = chrono::high_resolution_clock::now();
     chrono::duration<double,milli> d2 = end2-start2;
     cout<<d2.count()<<"\n";

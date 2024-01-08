@@ -27,15 +27,27 @@ int solve2(int arr[], int n, int k, int prod) {
     return w1+w2;
 }
 
+int solve3(int arr[], int n, int k, int p) {
+    if(p > k)   return 0;
+    if(n == 0)  return 1;
+
+    if(dp[n][p] != -1)  return dp[n][p];
+
+    int w1 = solve3(arr, n-1, k, p*arr[n-1]);
+    int w2 = solve3(arr, n-1, k, p);
+
+    return dp[n][p] = w1 + w2;
+}
+
 int main() {
-    int arr[] = { 4,8,7,2 };
+    int arr[] = { 1,2,3,4 };
     int n = sizeof(arr)/sizeof(int);
-    int k = 50;
+    int k = 10;
     memset(dp, -1, sizeof dp);
 
 
     auto start2 = chrono::high_resolution_clock::now();
-    cout<<solve2(arr,n,k,1)<<"--2\n";
+    cout<<solve3(arr,n,k,1)<<"--2\n";
     auto end2 = chrono::high_resolution_clock::now();
     chrono::duration<double,milli> d2 = end2-start2;
     cout<<d2.count()<<"\n";
