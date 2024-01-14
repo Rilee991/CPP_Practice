@@ -10,24 +10,36 @@ ll min(ll a, ll b) {
     return a < b ? b : a;
 }
 
-int main() {
-    ll n = 10, r = 4;
+ll solve(ll n, ll r, vector<vector<int>> &dp) {
+    if(n < r)   return 0;
+    else if(r == 0) return 1;
+    else if(r == 1) return n;
 
-    ll P[n+1][r+1];
+    if(dp[n][r] != -1)  return dp[n][r];
 
-    for(int i=0;i<=n;i++) {
-        for(int j=0;j<=min(i,r);j++) {
-            if(j == 0) {
-                P[i][j] = 1;
-            } else if(j == 1) {
-                P[i][j] = i;
-            } else {
-                P[i][j] = P[i-1][j] + j*P[i-1][j-1];
-            }
+    return dp[n][r] = solve(n-1,r, dp) + r*solve(n-1,r-1, dp);
+}
 
-            P[i][j+1] = 0;
+ll solveTab(ll n, ll r) {
+    // vector<vector<int>> dp(n+1, vector<int>(r+1,0));
+    vector<int> curr(r+1, 0);
+    vector<int> prev(r+1, 0);
+
+    for(ll i=0;i<=n;i++) {
+        for(ll j=0;j<=i;j++) {
+            if(j == 0)  curr[j] = 1;
+            else if(j == 1) curr[j] = i;
+            else curr[j] = prev[j]+j*prev[j-1];
         }
+        prev = curr;
     }
 
-    cout<<P[n][r];
+    return curr[r];
+}
+
+int main() {
+    ll n = 10, r = 2;
+    // vector<vector<int>> dp(n+1, vector<int>(r+1,-1));
+    // cout<<solve(n,r, dp);
+    cout<<solveTab(n, r);
 }
