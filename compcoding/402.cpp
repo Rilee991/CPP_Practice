@@ -64,16 +64,38 @@ int solve2(int arr[], int n) {
     return sum3;
 }
 
+int solve_1(int arr[], int n) {
+    int s1 = 0, s2 = 0, s3 = 0;
+    if(n >= 1)  s1 = arr[0];
+    if(n >= 2)  s2 = arr[0]+arr[1];
+    if(n >= 3)  s3 = max(arr[2]+arr[1], max(arr[2]+arr[0],s2));
+
+    if(n == 1)  return s1;
+    if(n == 2)  return s2;
+    if(n == 3)  return s3;
+
+    for(int i=3;i<n;i++) {
+        int sum = max(arr[i]+arr[i-1]+s1,max(arr[i]+s2,s3));
+        s1 = s2;
+        s2 = s3;
+        s3 = sum;
+    }
+
+    return s3;
+}
+
 int main() {
     int arr[] = { 100, 1000, 100, 1000, 1 };
     int n = sizeof(arr)/sizeof(int);
     memset(dp, -1, sizeof dp);
 
-    auto start2 = chrono::high_resolution_clock::now();
-    cout<<solve2(arr,n)<<"--2\n";
-    auto end2 = chrono::high_resolution_clock::now();
-    chrono::duration<double,milli> d2 = end2-start2;
-    cout<<d2.count()<<"\n";
+    cout<<solve_1(arr,n);
+
+    // auto start2 = chrono::high_resolution_clock::now();
+    // cout<<solve2(arr,n)<<"--2\n";
+    // auto end2 = chrono::high_resolution_clock::now();
+    // chrono::duration<double,milli> d2 = end2-start2;
+    // cout<<d2.count()<<"\n";
 
     return 0;
 }
