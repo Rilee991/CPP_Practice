@@ -31,12 +31,25 @@ int lps(string seq, int i, int j) {
     return dp[n][n];
 }
 
+int solve(string seq, int n) {
+    int dp[n+1][n+1];
+
+    for(int i=0;i<=n;i++) {
+        for(int j=0;j<=n;j++) {
+            if(i == 0 || j == 0) dp[i][j] = 0;
+            else if(seq[i-1] == seq[n-j]) dp[i][j] = 1 + dp[i-1][j-1];
+            else dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+        }
+    }
+
+    return dp[n][n];
+}
 // Driver program to test above functions
 int main()
 {
-	string seq = "GEEKSFORGEEKS";
+	string seq = "G";
 	int n = seq.size();
 	cout << "The length of the LPS is "
-		<< lps(seq, 0, n - 1);
+		<< solve(seq, n);
 	return 0;
 }

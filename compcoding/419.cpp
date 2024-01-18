@@ -64,6 +64,19 @@ node* newNode( int data )
 	return temp; 
 } 
 
+int solve2(node* root, bool canBeTaken) {
+	if(!root)	return 0;
+	
+	int w1 = canBeTaken ? solve2(root->left,false)+solve2(root->right,false)+1 : 0;
+	int w2 = solve2(root->left,true)+solve2(root->right,true);
+
+	return max(w1, w2);
+}
+
+int solveutil(node* root) {
+	return max(solve2(root, true), solve2(root, false));
+}
+
 // Driver Code
 int main() 
 { 
@@ -78,11 +91,13 @@ int main()
 	root->right = newNode(22); 
 	root->right->right = newNode(25); 
 
-    unordered_map<node*,int> mp;
+	cout<<solveutil(root);
 
-	cout << "Size of the Largest"
-		<< " Independent Set is "
-		<< max(solve(root,true,mp),solve(root,false,mp)); 
+    // unordered_map<node*,int> mp;
+
+	// cout << "Size of the Largest"
+	// 	<< " Independent Set is "
+	// 	<< max(solve(root,true,mp),solve(root,false,mp)); 
 
 	return 0; 
 } 
