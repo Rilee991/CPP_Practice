@@ -81,11 +81,28 @@ int findMaxProfit2(Job arr[], int n) {
     return solve(arr, n, 0, 0, dp);
 }
 
+int solve3(Job arr[], int i, int n, int lastEnd, vector<int> &dp) {
+	if(i == n)	return 0;
+
+	if(dp[i] != -1)	return dp[i];
+
+	int w1 = arr[i].start >= lastEnd ? solve3(arr, i+1, n, arr[i].finish, dp) + arr[i].profit : 0;
+	int w2 = solve3(arr, i+1, n, lastEnd, dp);
+
+	return max(w1, w2);
+}
+
+int findMaxProfit3(Job arr[], int n) {
+	sort(arr, arr+n, cmp);
+	vector<int> dp(n, -1);
+
+	return solve3(arr, 0, n, -1, dp);
+}
 // Driver program
 int main()
 {
 	Job arr[] = {{3, 10, 20}, {1, 2, 50}, {6, 19, 100}, {2, 100, 200}};
 	int n = sizeof(arr)/sizeof(arr[0]);
-	cout << "The optimal profit is " << findMaxProfit2(arr, n);
+	cout << "The optimal profit is " << findMaxProfit3(arr, n);
 	return 0;
 }
