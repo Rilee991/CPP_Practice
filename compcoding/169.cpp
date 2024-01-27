@@ -69,6 +69,26 @@ void mirrorify3(node* root) {
     root->left = root->right;
     root->right = temp;
 }
+
+void mirrorify4(node* root) {
+	if(!root)	return;
+
+	mirrorify4(root->left);
+	mirrorify4(root->right);
+
+	node* temp = root->left;
+	root->left = root->right;
+	root->right = temp;
+}
+
+void createNewTree(node* root, node** mRoot) {
+	if(!root)	return;
+
+	*mRoot = createNode(root->val);
+	createNewTree(root->left, &((*mRoot)->right));
+	createNewTree(root->right, &((*mRoot)->left));
+}
+
 // Driver code
 int main()
 {
@@ -84,11 +104,13 @@ int main()
 	inorder(tree);
 	node* mirror = NULL;
 	// mirrorify2(tree, &mirror);
-    mirrorify3(tree);
+    // mirrorify3(tree);
+	// mirrorify4(tree);
+	createNewTree(tree, &mirror);
 
 	// Print inorder traversal of the mirror tree
 	cout <<"\nInorder of mirror tree: ";
-	inorder(tree);
+	inorder(mirror);
 
 	return 0;
 }

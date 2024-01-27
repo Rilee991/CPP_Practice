@@ -151,6 +151,64 @@ void posti(Node* root) {
     
 }
 
+void prei3(Node* root) {
+    // print middle, left, right
+    stack<Node*> st;
+    st.push(root);
+
+    while(!st.empty()) {
+        Node* tp = st.top();
+        st.pop();
+        cout<<tp->data<<" ";
+
+        if(tp->right) st.push(tp->right);
+        if(tp->left) st.push(tp->left);
+    }
+}
+
+void ini3(Node* root) {
+    // left, middle, right
+    stack<pair<Node*,bool>> st;
+    st.push({ root, false });
+
+    while(!st.empty()) {
+        if(st.top().first->left) {
+            if(!st.top().second) {
+                st.top().second = true;
+                st.push({ st.top().first->left, false });
+            } else {
+                cout<<st.top().first->data<<" ";
+                auto tp = st.top();
+                st.pop();
+                if(tp.first->right) {
+                    st.push({ tp.first->right, false });
+                }
+            }
+        } else {
+            cout<<st.top().first->data<<" ";
+            st.pop();
+        }
+    }
+}
+
+void posti3(Node* root) {
+    stack<pair<Node*,bool>> st;
+
+    st.push({ root, false });
+
+    while(!st.empty()) {
+        auto tp = st.top();
+        if(!tp.second && tp.first->left != tp.first->right) {
+            st.top().second = true;
+            if(tp.first->right) st.push({ tp.first->right, false });
+            if(tp.first->left) st.push({ tp.first->left, false });
+        } else {
+            cout<<tp.first->data<<" ";
+            st.pop();
+        }
+    }
+}
+
 int main()
 { //[3] 4, 2, 1
     /* Construct the following tree
@@ -179,19 +237,26 @@ int main()
     cout<<"Inorder:\n";
     ior(root);
     cout<<"\n";
-    ioi(root);
+    ini3(root);
     cout<<"\n";
+    // ioi(root);
+    // cout<<"\n";
     cout<<"Preorder:\n";
     pre(root);
     cout<<"\n";
-    prei(root);
+    prei3(root);
     cout<<"\n";
-    prei2(root);
-    cout<<"\n";
+    // prei(root);
+    // cout<<"\n";
+    // prei2(root);
+    // cout<<"\n";
     cout<<"Postorder:\n";
     post(root);
     cout<<"\n";
-    posti(root);
+    // posti(root);
+    // cout<<"\n";
+    posti3(root);
+    cout<<"\n";
     
     return 0;
 }
