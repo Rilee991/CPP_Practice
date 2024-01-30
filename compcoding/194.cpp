@@ -58,27 +58,6 @@ void printKPathUtil(Node* root, vector<int>& path, int k)
 	path.pop_back();
 }
 
-void pre(Node* root, int curr, int sum, vector<int> path, vector<vector<int>> &res) {
-    if(!root)   return;
-
-    // Choice 1 considering
-    path.push_back(root->data);
-    curr += root->data;
-
-    if(sum == curr) {
-        res.push_back(path);
-    }
-    pre(root->left, curr, sum, path, res);
-    pre(root->right, curr, sum, path, res);
-
-    // Choice 2 not considering
-    path = {};
-    curr = 0;
-
-    pre(root->left, curr, sum, path, res);
-    pre(root->right, curr, sum, path, res);
-}
-
 // A wrapper over printKPathUtil()
 void printKPath(Node* root, int k)
 {
@@ -86,12 +65,32 @@ void printKPath(Node* root, int k)
 	printKPathUtil(root, path, k);
 }
 
+void pre(Node* root, int sum, vector<int> path, vector<vector<int>> &res) {
+    if(!root)   return;
+
+    path.push_back(root->data);
+    pre(root->left, sum, path, res);
+    pre(root->right, sum, path, res);
+
+	int curr = 0;
+
+	vector<int> temp;
+	for(int i=path.size()-1;i>=0;i--) {
+		curr += path[i];
+		temp.push_back(path[i]);
+		if(curr == sum) {
+			res.push_back(temp);
+		}
+	}
+
+	path.pop_back();
+}
 
 void solve(Node* root, int sum) {
     vector<vector<int>> res;
     vector<int> path;
 
-    pre(root, 0, sum, path, res);
+    pre(root, sum, path, res);
 
     for(auto it: res) {
         for(auto jt: it)
