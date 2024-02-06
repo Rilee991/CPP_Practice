@@ -80,14 +80,49 @@ int minSwaps2(int arr[], int n) {
     return res;
 }
 
+vector<int> getInorder(int arr[], int i, int j) {
+	if(i > j)	return {};
+
+	vector<int> res = getInorder(arr,2*i+1,j);
+	res.push_back(arr[i]);
+	vector<int> right = getInorder(arr,2*i+2,j);
+	for(int i=0;i<right.size();i++)
+		res.push_back(right[i]);
+	
+	return res;
+}
+
+int minSwaps3(int arr[], int n) {
+	vector<int> inArr = getInorder(arr, 0, n-1);
+	vector<pair<int,int>> temp(n);
+	int swaps = 0;
+
+	for(int i=0;i<n;i++) temp[i] = { inArr[i], i };
+
+	sort(temp.begin(), temp.end(), [](pair<int,int>p1, pair<int,int>p2) {
+		return p1.first < p2.first;
+	});
+
+	// for(int i=0;i<n;i++) cout<<temp[i].first<<" "<<temp[i].second<<"\n";
+
+	for(int idx=0;idx<n;idx++) {
+		while(idx != temp[idx].second) {
+			swaps++;
+			swap(temp[idx], temp[temp[idx].second]);
+		}
+	}
+
+	return swaps;
+}
+
 // Driver code
 int main()
 {
-	int a[] = { 5, 6, 7, 8, 9, 10, 11 };
+	int a[] = {1, 2, 3  };
 	int n = sizeof(a) / sizeof(a[0]);
 	// inorder(a, v, n, 0);
 	// cout << minSwaps(v) << endl;
-    cout<<minSwaps2(a,n);
+    cout<<minSwaps3(a,n);
 }
 
 // This code is contributed by code_freak
