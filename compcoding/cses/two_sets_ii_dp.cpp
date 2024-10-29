@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int MOD = 1000000007;
+const int MOD = 1e9+7;
 
 // Function to compute the result for a given n (to be implemented)
 int dfs(int n, int sum) {
@@ -13,7 +13,7 @@ int dfs(int n, int sum) {
     if(n == 0)
         return 0;
     
-    int take = dfs(n-1, sum-n)%MOD;
+    int take = sum-n >= 0 ? dfs(n-1, sum-n)%MOD : 0;
     int noTake = dfs(n-1, sum)%MOD;
 
     return (take + noTake)%MOD;
@@ -25,8 +25,8 @@ int computeResult(int n) {
     if(sum&1)
         return 0;
     // vector<vector<int>> dp(n+1, vector<int>(sum/2 + 1, 0));
-    vector<int> curr(sum/2 + 1, 0);
-    vector<int> prev(sum/2 + 1, 0);
+    vector<long long> curr(sum/2 + 1, 0);
+    vector<long long> prev(sum/2 + 1, 0);
 
     prev[0] = 1;
 
@@ -35,8 +35,8 @@ int computeResult(int n) {
             if(s == 0)
                 curr[s] = 1;
             else {
-                int take = prev[s-i]%MOD;
-                int noTake = prev[s]%MOD;
+                long long take = s-i >= 0 ? prev[s-i]%MOD : 0;
+                long long noTake = prev[s]%MOD;
 
                 curr[s] = (take + noTake)%MOD;
             }
@@ -44,7 +44,7 @@ int computeResult(int n) {
         prev = curr;
     }
 
-    return curr[sum/2]/2;
+    return ((prev[sum/2] * 500000004)%MOD)%MOD;
     // return dfs(n, sum/2)/2;
 }
 
